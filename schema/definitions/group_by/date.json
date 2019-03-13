@@ -1,0 +1,16 @@
+{
+  "type": "object",
+  "required": [
+    "interval"
+  ],
+  "properties": {
+    "interval": {
+      "title": "Date Granularity",
+      "description": "Date granularity to use when grouping values into buckets"
+    },
+    "default": {
+      "title": "Default Value",
+      "description": "A default value to apply to documents in groupings"
+    }
+  }
+}

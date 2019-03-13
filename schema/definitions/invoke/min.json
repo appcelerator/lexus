@@ -1,0 +1,12 @@
+{
+  "required": [ "field" ],
+  "properties": {
+    "method": {
+      "type": "string",
+      "const": "min"
+    },
+    "params": {
+      "type": "object"
+    }
+  }
+}

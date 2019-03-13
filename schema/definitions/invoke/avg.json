@@ -1,0 +1,12 @@
+{
+  "required": [ "field" ],
+  "properties": {
+    "method": {
+      "type": "string",
+      "const": "avg"
+    },
+    "params": {
+      "type": "object"
+    }
+  }
+}

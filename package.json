@@ -1,0 +1,33 @@
+{
+  "name": "lexus-spec",
+  "version": "1.1.0",
+  "description": "Elasticsearch query construction using shorthand and hooks",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/appcelerator/lexus-spec.git"
+  },
+  "author": "Isaac Whitfield",
+  "readmeFilename": "README.md",
+  "bin": {
+    "lexus-spec": "./bin/lexus-spec"
+  },
+  "scripts": {
+    "lint": "eslint --ext .js ./"
+  },
+  "dependencies": {
+    "ajv": "6.10.0",
+    "async": "2.6.0",
+    "eslint-plugin-mocha": "5.0.0",
+    "js-yaml": "3.11.0",
+    "json-schema-ref-parser": "5.0.0",
+    "ngeohash": "0.6.0",
+    "sb-promisify": "2.0.2"
+  },
+  "devDependencies": {
+    "dep-validate": "1.1.3",
+    "eslint": "4.19.1",
+    "eslint-config-axway": "2.0.13",
+    "mocha": "5.0.5",
+    "should": "13.2.1"
+  }
+}

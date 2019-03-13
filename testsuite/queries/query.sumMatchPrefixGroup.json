@@ -1,0 +1,6 @@
+{
+  "testId": "query.sumMatchPrefixGroup.json",
+  "description": "the sum of 'temperature' field values per sensor.deviceID where the sensor.deviceID starts with a '1'",
+  "query": [{"version": "0.2", "invoke": {"method": "sum", "field": "temperature"}, "filters": {"$match": {"event": "temperature.sensor.reading"}, "$prefix": {"sensor.deviceID": "1"}}, "group_by": ["sensor.deviceID"]}],
+  "result": [{"version":"0.2","result":{"1f7a4d18cbc4":201,"1e82ce4f4847":295}}]
+}

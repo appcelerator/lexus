@@ -1,0 +1,14 @@
+{
+  "type": "object",
+  "properties": {
+    "limit": {
+      "title": "Term Limits",
+      "description": "Limits on the amount of terms being returned in this grouping phase",
+      "default": 100
+    },
+    "default": {
+      "title": "Default Value",
+      "description": "A default value to apply to documents in groupings"
+    }
+  }
+}

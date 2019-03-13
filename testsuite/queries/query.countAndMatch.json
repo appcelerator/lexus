@@ -1,0 +1,6 @@
+{
+  "testId": "query.countAndMatch.json",
+  "description": "count of 'wind.sensor.reading' events with a wind.direction of 's'",
+  "query": [{"version": "0.2", "invoke": {"method": "count", "field": "id"}, "filters": {"$and": [{"$match": {"event": "wind.sensor.reading"}}, {"$match": {"wind.direction": "s"}}]}}],
+  "result": [{"version":"0.2","result":3}]
+}

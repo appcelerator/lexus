@@ -1,0 +1,6 @@
+{
+  "testId": "query.maxGroup.json",
+  "description": "the maximum value for the 'temperature' field, for each sensor.deviceID value",
+  "query": [{"version": "0.2", "invoke": {"method": "max", "field": "temperature"}, "group_by": ["sensor.deviceID"]}],
+  "result": [{"version":"0.2","result":{"1f7a4d18cbc4":47,"f5ab6dad57be":46,"6aff420e0e20":45,"1e82ce4f4847":46,"2e7235b97fb1":48,"522b29774b56":46,"3a822ab8eddc":44}}]
+}

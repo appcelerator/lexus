@@ -1,0 +1,22 @@
+{
+  "required": [ "field" ],
+  "properties": {
+    "method": {
+      "type": "string",
+      "const": "distinct"
+    },
+    "params": {
+      "type": "object",
+      "properties": {
+        "count": {
+          "type": "boolean",
+          "description": "Boolean value to dictate whether counts are included with the terms list"
+        },
+        "limit": {
+          "type": "number",
+          "description": "The maximum number of terms to return, implicitly sorted by occurrence."
+        }
+      }
+    }
+  }
+}

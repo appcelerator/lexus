@@ -1,0 +1,36 @@
+---
+oneOf:
+- description: A field name representing terms to group by
+  type: string
+- description: A grouping object, dictating the type and field to group on
+  type: array
+  items:
+    type: object
+    required:
+    - field
+    - type
+    additionalProperties: false
+    properties:
+      type:
+        title: Grouping Type
+        description: The data type being used by the grouping operation
+        oneOf:
+        - enum:
+          - date
+          - numeric
+          - string
+        - type: string
+          pattern: ^custom:\w+$
+      field:
+        title: Grouping Field
+        description: The document path to look at when creating groups
+        type: string
+      params:
+        title: Grouping Parameters
+        description:
+          Arbitrary parameters to pass to the grouping operation. Behaviour
+          of these options is specific to the backend being utilised.
+        oneOf:
+        - "$ref": group_by/date.json
+        - "$ref": group_by/numeric.json
+        - "$ref": group_by/string.json

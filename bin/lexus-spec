@@ -1,0 +1,37 @@
+#!/usr/bin/env node
+const fs = require('fs');
+const sb = require('sb-promisify');
+const spec = require('../lib/lexus-spec');
+
+switch (process.argv[2]) {
+  case 'bundle':
+    doBundle(process.argv[3]);
+    break;
+  case 'validate':
+    doValidate(process.argv[3], process.argv[4]);
+    break;
+  default:
+    exit(1, 'Invalid option provided!');
+}
+
+function doBundle(vsn) {
+  spec
+    .bundle(vsn)
+    .then(schema => exit(0, JSON.stringify(schema, null, 2)))
+    .catch(err => exit(1, err));
+}
+
+function doValidate(vsn, query) {
+  sb.promisify(fs.readFile)(query)
+    .then(JSON.parse)
+    .then(query => spec.validate(vsn, query))
+    .then(() => exit(0))
+    .catch(err => exit(1, err));
+}
+
+function exit(code, msg) {
+  if (msg) {
+    console[code === 0 ? 'info' : 'error'](msg);
+  }
+  process.exit(code);
+}
