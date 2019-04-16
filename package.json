@@ -1,10 +1,10 @@
 {
-  "name": "lexus-spec",
-  "version": "1.1.0",
-  "description": "Elasticsearch query construction using shorthand and hooks",
+  "name": "Lexus",
+  "version": "0.2",
+  "description": "A small, portable JSON language for querying data.",
   "repository": {
     "type": "git",
-    "url": "https://github.com/appcelerator/lexus-spec.git"
+    "url": "https://github.com/appcelerator/lexus.git"
   },
   "author": "Isaac Whitfield",
   "readmeFilename": "README.md",
