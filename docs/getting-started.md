@@ -241,7 +241,7 @@ The results returned will be broken down into sections for each value that can a
     }
   },
   "group_by": [
-    "target,
+    "target",
     "software_version"
   ]
 }
@@ -402,7 +402,7 @@ This parameterizes the execution of the `distinct` method to only allow the most
     }
   },
   "group_by": [
-    "target,
+    "target",
     "software_version"
   ]
 }
@@ -492,7 +492,7 @@ Note that as a shorthand for `$or` we can supply an array of strings to a field 
     }
   },
   "group_by": [
-    "target,
+    "target",
     "software_version"
   ]
 }
