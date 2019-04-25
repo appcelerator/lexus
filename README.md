@@ -42,7 +42,7 @@ TBD
 
 If you would like to report a bug, feel something can be improved, or have any questions about Lexus please feel free to file a Github issue.
 
-If you have implemented a new Lexus frontend or backend implementation, please try to implement tests that cover all the cases in the Lexus test suite in [testsuite/](https://github.com/appcelerator/lexus-opensource/tree/master/testsuite). You may then file a PR to add your project's repository to the table above in this README.md file.
+If you have implemented a new Lexus frontend or backend implementation, please try to implement tests that cover all the cases in the Lexus test suite in [testsuite/](https://github.com/appcelerator/lexus-opensource/tree/master/testsuite). The tool described [here](https://github.com/appcelerator/lexus/blob/master/testsuite/README.md) might make things easier to start out. You may then file a PR to add your project's repository to the table above in this README.md file.
 
 ## Licence
 
