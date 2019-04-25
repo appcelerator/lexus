@@ -1,4 +1,5 @@
 # Lexus
+[![Build Status](https://jenkins.appcelerator.org/buildStatus/icon?job=pem/lexus/master)](https://jenkins.appcelerator.org/job/pem/job/lexus/job/master/)
 
 *Please note the open source Lexus project is a work in progress. There are some aspect of the current version that are likely to change soon. And other portions of the Lexus project will be open sourced in other repositories.*
 
