@@ -1,6 +1,6 @@
 {
-  "name": "Lexus",
-  "version": "0.2",
+  "name": "lexus",
+  "version": "0.2.0",
   "description": "A small, portable JSON language for querying data.",
   "repository": {
     "type": "git",
