@@ -32,6 +32,7 @@ ansiColor('xterm') {
 
       // main builds
       stage('Build') {
+        exec('npm install')
         exec('bin/lexus-spec bundle v0.2')
       }
     } finally {
