@@ -17,7 +17,7 @@ oneOf:
         oneOf:
         - enum:
           - date
-          - numeric
+          - number
           - string
         - type: string
           pattern: ^custom:\w+$
