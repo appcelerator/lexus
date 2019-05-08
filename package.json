@@ -12,7 +12,8 @@
     "lexus-spec": "./bin/lexus-spec"
   },
   "scripts": {
-    "lint": "eslint --ext .js ./"
+    "test": "npm run lint ; mocha --ui tdd --recursive test/",
+    "lint": "./node_modules/.bin/eslint ./ || exit 0"
   },
   "dependencies": {
     "ajv": "6.10.0",
