@@ -21,9 +21,9 @@
       "title": "Document Filtering",
       "$ref": "definitions/filters.json"
     },
-    "group_by": {
+    "groups": {
       "title": "Document Grouping",
-      "$ref": "definitions/group_by.yml"
+      "$ref": "definitions/groups.yml"
     }
   }
 }
