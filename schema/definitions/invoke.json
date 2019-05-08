@@ -27,9 +27,6 @@
           "$ref": "invoke/count.json"
         },
         {
-          "$ref": "invoke/distinct.json"
-        },
-        {
           "$ref": "invoke/find.json"
         },
         {
