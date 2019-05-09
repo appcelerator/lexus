@@ -77,6 +77,11 @@
             "description": "Matching clauses in a standard OR-style"
           },
           {
+            "type": "string",
+            "description": "Arbitrary value the field must match"
+          },
+          {
+            "type": "number",
             "description": "Arbitrary value the field must match"
           }
         ]
@@ -112,7 +117,7 @@
         "additionalProperties": {
           "anyOf": [
             {
-              "oneOf": [
+              "anyOf": [
                 {
                   "lt": {
                     "type": "number",
@@ -128,7 +133,7 @@
               ]
             },
             {
-              "oneOf": [
+              "anyOf": [
                 {
                   "gt": {
                     "type": "number",

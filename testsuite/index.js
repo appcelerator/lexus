@@ -36,22 +36,22 @@ module.exports = {
   init: function (callback) {
     let that = this;
     let waiting = queryFiles.length;
-    let fileDone = function () {
+    function fileDone () {
       waiting -= 1;
       if (waiting <= 0) {
         fs.readFile(RECORDS_FILE, function (err, data) {
           if (err) {
-            throw Exception(err);
+            throw new Error(err);
           }
           that.records = jsonlToJson(data.toString());
           callback && callback();
         });
       }
-    };
+    }
     for (let queryFile of queryFiles) {
       fs.readFile(queryFile, function (err, data) {
         if (err) {
-          throw Exception(err);
+          throw new Error(err);
         }
         let json = JSON.parse(data);
         that.queries[json.testId] = json;

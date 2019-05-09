@@ -5,26 +5,26 @@ const spec = require('../lib/lexus-spec');
 
 switch (process.argv[2]) {
   case 'bundle':
-    doBundle(process.argv[3]);
+    doBundle();
     break;
   case 'validate':
-    doValidate(process.argv[3], process.argv[4]);
+    doValidate(process.argv[3]);
     break;
   default:
     exit(1, 'Invalid option provided!');
 }
 
-function doBundle(vsn) {
+function doBundle() {
   spec
-    .bundle(vsn)
+    .bundle()
     .then(schema => exit(0, JSON.stringify(schema, null, 2)))
     .catch(err => exit(1, err));
 }
 
-function doValidate(vsn, query) {
+function doValidate(query) {
   sb.promisify(fs.readFile)(query)
     .then(JSON.parse)
-    .then(query => spec.validate(vsn, query))
+    .then(query => spec.validate(query))
     .then(() => exit(0))
     .catch(err => exit(1, err));
 }
