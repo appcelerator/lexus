@@ -1,10 +1,10 @@
-const fs = require('fs');
-const should = require('should');
+const fs = require('fs').promises;
+
 const lexusSpec = require('../lib/lexus-spec');
 const LEXUS_VERSION = '0.2';
 
-function validateLexusQuery(query) {
-  lexusSpec.validate(query);
+async function validateLexusQuery(query) {
+  return lexusSpec.validate(query);
 }
 
 function getLexusQueries(s) {
@@ -16,17 +16,21 @@ function getLexusQueries(s) {
   while (results.index !== -1) {
     results = getNextLexusQuery(s, results.index);
     if (results.index !== -1) {
-      queries.push(results.query);
+      try {
+        queries.push(JSON.parse(results.query));
+      } catch (e) {
+        // not a query
+      }
     }
   }
   return queries;
 }
 
 function getNextLexusQuery(s, index) {
-  const TRIPPLE_BACKTICK = '```';
-  let idx = s.indexOf(TRIPPLE_BACKTICK, index);
+  const TRIPLE_BACKTICK = '```';
+  let idx = s.indexOf(TRIPLE_BACKTICK, index);
   if (idx !== -1) {
-    let edx = s.indexOf(TRIPPLE_BACKTICK, idx + 1);
+    let edx = s.indexOf(TRIPLE_BACKTICK, idx + 1);
     if (edx !== -1) {
       return {
         query: s.substring(idx + 3, edx),
@@ -41,9 +45,8 @@ function getNextLexusQuery(s, index) {
   return result;
 }
 
-function isLexusQuery(s) {
+function isLexusQuery(j) {
   try {
-    let j = JSON.parse(s);
     if (!Array.isArray(j)) {
       j = [ j ];
       for (let q of j) {
@@ -58,20 +61,19 @@ function isLexusQuery(s) {
   return false;
 }
 
-suite('Lexus Over Streams', () => {
-  test('docs/getting-started.md', (done) => {
-    fs.readFile('./docs/getting-started.md', function (err, data) {
-      if (err) {
-        return done(err);
-      }
-      let queries = getLexusQueries(data.toString());
-      for (let query of queries) {
-        if (isLexusQuery(query)) {
-          validateLexusQuery(query);
-          should({ foo: 'FIX' }).deepEqual({ bar: 'ME' });
+suite('Lexus Over Streams', function () {
+  test('docs/getting-started.md', async function () {
+    let data = await fs.readFile('./docs/getting-started.md');
+    let queries = getLexusQueries(data.toString());
+
+    for (let query of queries) {
+      if (isLexusQuery(query)) {
+        try {
+          await validateLexusQuery(query);
+        } catch (e) {
+          throw new Error(e.message + '\n\n' + JSON.stringify(query, null, 2));
         }
       }
-      done();
-    });
+    }
   });
 });

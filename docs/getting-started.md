@@ -65,13 +65,13 @@ The result returned looks like:
 ]
 ```
 
-### Example 3 - Using the Distinct Method
+### Example 3 - Using groups
 
 ```
 {
   "version": "0.2",
   "invoke": {
-    "method": "distinct",
+    "method": "count",
     "field": "event"
   },
   "filters": {
@@ -81,59 +81,43 @@ The result returned looks like:
         "lte": 1517431004082
       }
     }
-  }
+  },
+  "groups": [
+    "event"
+  ]
 }
 ```
 
-We are again using `event` in the `field` field.
-But this time `invoke.method` is `distinct`.
-This will instruct Lexus to give us the distinct set of values in the `event` field.
-Since this can be a rather large set, we will filter the results to only be within a 10-second time range specified in milliseconds where `1517430994082 <= timestamp <= 1517431004082`.
-This is done by adding a `$range` filter in the `filters` section.
-The `filters` section can contain additional filters.
-We will see examples with more below.
+The use of `groups` in Lexus is similar to the SQL `group by` syntax.
+The results returned will be broken down into sections for each value that can appear in the field named in the `groups`.
 
-The result of this query will look like this:
 ```
 [
   {
     "version": "0.2",
     "result": {
       "reactor.audit.start": 873,
-      "reactor.audit.end": 768,
-      "process.set.token": 139,
-      "geo.recalibrate": 101,
-      "boundingbox.lookup": 85,
+      "reactor.audit.end": 537,
+      "boundingbox.lookup": 80,
+      "process.set.token": 136,
       "process.unset.token": 80,
-      "storage.reshard": 73,
-      "user.login": 66,
-      "compass.access": 61,
-      "audit.run.install": 54
+      "geo.recalibrate": 26,
+      "audit.run.install": 55,
+      "user.login": 35,
+      "thermometer.reset": 13,
+      "app.pause": 16
     }
   }
 ]
 ```
 
-The list of filters available are:
-- $and
-- $or
-- $not
-- $exists
-- $geo
-- $match
-- $prefix
-- $range
-- $suffix
-
-The `filters` section allows for an arbitrary boolean expression of ANDed, ORed and NOTed terms to be composed telling Lexus which values we are interested for which fields.
-
-### Example 4 - Using group-by
+### Example 4 - Multiple groups
 
 ```
 {
   "version": "0.2",
   "invoke": {
-    "method": "distinct",
+    "method": "count",
     "field": "event"
   },
   "filters": {
@@ -144,14 +128,18 @@ The `filters` section allows for an arbitrary boolean expression of ANDed, ORed 
       }
     }
   },
-  "group_by": [
-    "target"
+  "groups": [
+    "target",
+    "event"
   ]
 }
 ```
-This example is identical to the above example except that a new section called `group_by` has been added.
-The use of `group_by` in Lexus is similar to the SQL `group by` syntax.
-The results returned will be broken down into sections for each value that can appear in the field named in the `group_by`.
+
+This example is identical to the above example except that the `groups` array now has `target` added.
+In Lexus the value specified in the `groups` field is an array of strings that name the fields in the database we want to perform the grouping on.
+The fields appearing earlier in the list are outermost in the grouping.
+
+(The results of this query below have been truncated to save space.)
 ```
 [
   {
@@ -223,172 +211,18 @@ The results returned will be broken down into sections for each value that can a
 ]
 ```
 
-### Example 5 - Multiple group-by items
-
-```
-{
-  "version": "0.2",
-  "invoke": {
-    "method": "distinct",
-    "field": "event"
-  },
-  "filters": {
-    "$range": {
-      "timestamp": {
-        "gte": 1517430994082,
-        "lte": 1517431004082
-      }
-    }
-  },
-  "group_by": [
-    "target",
-    "software_version"
-  ]
-}
-```
-
-This example is identical to the above example except that the `group_by` array now has `software_version` added.
-In Lexus the value specified in the `group_by` field is an array of strings that name the fields in the database we want to perform the grouping on.
-The fields appearing earlier in the list are outermost in the grouping.
-
-(The results of this query below have been truncated to save space.)
-```
-[
-  {
-    "version": "0.2",
-    "result": {
-      "ios": {
-        "5.4.11.168": {
-          "reactor.audit.start": 22,
-          "reactor.audit.end": 12,
-          "storage.audit": 5,
-          "geo.recalibrate": 5,
-          "trucks": 2,
-          "fencepost": 2,
-          "local.query": 1,
-          "sensor.check": 1
-        },
-        "1.0.0": {
-          "settings.clear": 12,
-          "xhr.check": 10,
-          "audit.silo": 7,
-          "reactor.audit.start": 4,
-          "option.refresh": 1,
-          "sensor.notification": 1
-        }
-      },
-      "android": {
-        "4.0.5": {
-          "filter.apply": 5,
-          "reactor.audit.start": 5,
-          "database.update": 1,
-          "crash.report": 1,
-          "reactor.audit.end": 1
-        },
-        "5.4.11.168": {
-          "reactor.audit.start": 4,
-          "reactor.audit.end": 3,
-          "boundingbox.lookup": 2,
-          "total.audit.results": 1,
-          "sensor.check": 1,
-          "storage.audit": 1,
-          "videocard.check": 1
-        },
-        "4.5.2": {
-          "reactor.audit.end": 6,
-          "reactor.audit.start": 5,
-          "audit.run.install": 1
-        },
-        "2.19.5": {
-          "reactor.audit.start": 8,
-          "reactor.audit.end": 3
-        },
-        "6.2.3": {
-          "reactor.audit.start": 6,
-          "reactor.audit.end": 3
-        }
-      },
-      "raspberrypi": {
-        "2.61": {
-          "reactor.audit.start": 1
-        }
-      },
-      "osx": {
-        "5.0.14": {
-          "reactor.audit.end": 2,
-          "reactor.audit.start": 2,
-          "android.hardware.start": 1,
-          "android.vm.start": 1,
-          "iphone.vm.start": 1,
-          "universal.vm.start": 1
-        },
-        "5.0.0.1509508333": {
-          "reactor.CE": 1,
-          "reactor.core.temp": 1,
-          "code.analyze.fail": 1,
-          "nav.simulator.outofmem": 1,
-          "universal.vm.start": 1
-        },
-        "3.6.0": {
-          "code.analyze.CUE": 1
-        },
-        "4.8.0.1467089556": {
-          "reactor.core.temp": 1
-        }
-      },
-      "win32": {
-        "3.6.0": {
-          "code.analyze.ruby": 2,
-          "reactor.DTE": 1,
-          "reactor.ruby": 1,
-          "reactor.source": 1,
-          "code.analyze.php": 1,
-          "reactor.audit.end": 1
-        },
-        "5.0.0.1509508333": {
-          "command.execute": 1,
-          "tunnel.secure": 1,
-          "upload.secure": 1
-        },
-        "3.6.2.1413590556": {
-          "code.analyze.html": 1
-        },
-        "5.0.14": {
-          "timing.run": 1
-        }
-      },
-      "linux": {
-        "3.6.2.1413590556": {
-          "tunnel.secure": 2,
-          "upload.secure": 2,
-          "reactor.failover": 1,
-          "code.analyze.php": 1,
-          "code.analyze.ruby": 1,
-          "code.analyze.xml": 1,
-          "tunnel.unsecure": 1,
-          "upload.unsecure": 1
-        }
-      }
-    }
-  }
-]
-```
-
-### Example 6 - More Filtering, Limiting Distinct
+### Example 5 - More Filtering, Limiting Groups
 
 Here we show an example of the `$match` filter where we ask for the `source` field to match `analytics-api`.
-We also have added a `"limit": 3` section under `params` in the `invoke`.
-This parameterizes the execution of the `distinct` method to only allow the most popular 3 terms in the distinct to be returned.
+We also have added a `"limit": 3` section under `params` in the `groups`.
+This parameterizes the grouping to only allow the most popular 3 terms to be returned.
 
 ```
 {
   "version": "0.2",
   "invoke": {
-    "method": "distinct",
-    "field": "event",
-    "params":{
-      "limit": 3
-    }
+    "method": "count",
+    "field": "event"
   },
   "filters": {
     "$range": {
@@ -401,9 +235,15 @@ This parameterizes the execution of the `distinct` method to only allow the most
       "source": "analytics-api"
     }
   },
-  "group_by": [
-    "target",
-    "software_version"
+  "groups": [
+    {
+      "type": "string",
+      "field": "target",
+      "params": {
+        "limit": 3
+      }
+    },
+    "event"
   ]
 }
 ```
@@ -411,69 +251,45 @@ This parameterizes the execution of the `distinct` method to only allow the most
 The above two additions will cause the same result to be returned as the previous example, but with no more than 3 terms in each event list and all non `analytics-api` related events removed. Because of this the `osx`, `win32` and `linux` `target` terms are gone.
 
 ```
+
 [
   {
     "version": "0.2",
     "result": {
       "ios": {
-        "5.4.11.168": {
-          "reactor.audit.start": 22,
-          "reactor.audit.end": 12,
-          "storage.audit": 5
-        },
-        "1.0.0": {
-          "settings.clear": 12,
-          "xhr.check": 10,
-          "audit.silo": 7
-        }
+        "reactor.audit.start": 419,
+        "reactor.audit.end": 269,
+        "boundingbox.lookup": 80,
+        "process.set.token": 64,
+        "process.unset.token": 36,
+        "geo.recalibrate": 26,
+        "audit.run.install": 25,
+        "user.login": 21,
+        "thermometer.reset": 13
       },
       "android": {
-        "4.0.5": {
-          "filter.apply": 5,
-          "reactor.audit.start": 5,
-          "database.update": 1
-        },
-        "5.4.11.168": {
-          "reactor.audit.start": 4,
-          "reactor.audit.end": 3,
-          "boundingbox.lookup": 2
-        },
-        "4.5.2": {
-          "reactor.audit.end": 6,
-          "reactor.audit.start": 5,
-          "audit.run.install": 1
-        },
-        "2.19.5": {
-          "reactor.audit.start": 8,
-          "reactor.audit.end": 3
-        },
-        "6.2.3": {
-          "reactor.audit.start": 6,
-          "reactor.audit.end": 3
-        }
-      },
-      "raspberrypi": {
-        "2.61": {
-          "reactor.audit.start": 1
-        }
+        "reactor.audit.start": 451,
+        "reactor.audit.end": 265,
+        "process.set.token": 72,
+        "process.unset.token": 44,
+        "audit.run.install": 30,
+        "app.pause": 16,
+        "user.login": 13
       }
     }
   }
 ]
 ```
 
-### Example 7 - Shortcut for OR
+### Example 6 - Shortcut for OR
 
 Note that as a shorthand for `$or` we can supply an array of strings to a field in `$match` implicitly asking for an `$or` of any of the items in th list.
 ```
 {
   "version": "0.2",
   "invoke": {
-    "method": "distinct",
-    "field": "event",
-    "params":{
-      "limit": 3
-    }
+    "method": "count",
+    "field": "event"
   },
   "filters": {
     "$range": {
@@ -491,9 +307,9 @@ Note that as a shorthand for `$or` we can supply an array of strings to a field 
       ]
     }
   },
-  "group_by": [
+  "groups": [
     "target",
-    "software_version"
+    "event"
   ]
 }
 ```
@@ -505,13 +321,9 @@ Only 2 `software_version` terms in the `target` of `osx` had events in the `$mat
     "version": "0.2",
     "result": {
       "osx": {
-        "5.0.14": {
-          "iphone.vm.start": 1,
-          "universal.vm.start": 1
-        },
-        "5.0.0.1509508333": {
-          "universal.vm.start": 1
-        }
+        "iphone.vm.start": 1,
+        "universal.vm.start": 1
+        "universal.vm.start": 1
       }
     }
   }
@@ -519,7 +331,7 @@ Only 2 `software_version` terms in the `target` of `osx` had events in the `$mat
 ```
 
 
-### Example 8 - limit, offset, sort, include
+### Example 7 - limit, offset, sort, include
 
 In this example we ask Lexus for complete documents using `find` where `source = 'analytics-api'` and `event = 'reactor.audit.end'` and `target = 'android'` for the same time range as above.
 We ask for a `limit` of 10 documents, and furthermore for an `offset` of 2.
@@ -614,7 +426,6 @@ We have not covered all the methods Lexus provides in this tutorial. The current
 
 - find
 - count
-- distinct
 - cardinality
 - avg
 - max
