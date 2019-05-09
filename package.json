@@ -12,7 +12,7 @@
     "lexus-spec": "./bin/lexus-spec"
   },
   "scripts": {
-    "lint": "./node_modules/.bin/eslint ./ || exit 0",
+    "lint": "eslint --ext=js ./",
     "test": "npm run lint ; mocha --ui tdd --recursive test/"
   },
   "dependencies": {
@@ -20,7 +20,6 @@
     "async": "2.6.0",
     "eslint-plugin-mocha": "5.0.0",
     "js-yaml": "3.11.0",
-    "json-schema-ref-parser": "5.0.0",
     "ngeohash": "0.6.0",
     "sb-promisify": "2.0.2"
   },
