@@ -33,7 +33,8 @@ ansiColor('xterm') {
       // main builds
       stage('Build') {
         exec('npm install')
-        exec('bin/lexus-spec bundle v0.2')
+        exec('npm test')
+        exec('bin/lexus-spec bundle')
       }
     } finally {
       // stop all spare docker containers just in case

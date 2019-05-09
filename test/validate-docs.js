@@ -4,7 +4,7 @@ const lexusSpec = require('../lib/lexus-spec');
 const LEXUS_VERSION = '0.2';
 
 function validateLexusQuery(query) {
-  lexusSpec.validate(LEXUS_VERSION, query);
+  lexusSpec.validate(query);
 }
 
 function getLexusQueries(s) {
