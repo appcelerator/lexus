@@ -424,11 +424,11 @@ The results look like this:
 
 We have not covered all the methods Lexus provides in this tutorial. The current list is:
 
-- find
-- count
-- cardinality
 - avg
+- count
+- find
 - max
 - min
 - sum
+- unique
 
