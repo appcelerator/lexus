@@ -1,5 +1,5 @@
 {
-  "testId": "query.countAll100.json",
+  "testId": "countAll100",
   "description": "count of all 100 documents",
   "query": [{"version": "0.2", "invoke": {"method": "count", "field": "id"}}],
   "result": [{"version":"0.2","result":100}]

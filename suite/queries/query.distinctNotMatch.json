@@ -1,6 +1,6 @@
 {
-  "testId": "query.distinctNotMatch.json",
+  "testId": "distinctNotMatch",
   "description": "list the distinct values for the 'meta.units' field in non 'temperature.sensor.reading' events. with the count of the number of documents each value appears in",
-  "query": [{"version": "0.2", "invoke": {"method": "distinct", "field": "meta.units"}, "filters": {"$not": [{"$match": {"event": "temperature.sensor.reading"}}]}}],
+  "query": [{"version": "0.2", "invoke": {"method": "count", "field": "event"}, "filters": {"$not": [{"$match": {"event": "temperature.sensor.reading"}}]}, "groups": ["meta.units"] }],
   "result": [{"version":"0.2","result":{"percent humidity":39,"mph":23}}]
 }

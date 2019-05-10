@@ -1,5 +1,34 @@
 const fs = require('fs').promises;
+
 const spec = require('../lib/spec');
+const tests = require('../suite');
+
+suite('Lexus Validation', function () {
+  test('docs/getting-started.md', async function () {
+    let data = await fs.readFile('./docs/getting-started.md');
+    let queries = getLexusQueries(data.toString());
+
+    for (let query of queries) {
+      if (isLexusQuery(query)) {
+        await validateQuery(query);
+      }
+    }
+  });
+
+  test('suite/queries', async function () {
+    await tests.init();
+
+    for (let test of Object.keys(tests.queries)) {
+      let queries = tests.queries[test].query;
+      if (!Array.isArray(queries)) {
+        queries = [ queries ];
+      }
+      for (let query of queries) {
+        await validateQuery(query);
+      }
+    }
+  });
+});
 
 function getLexusQueries(s) {
   let queries = [];
@@ -55,21 +84,12 @@ function isLexusQuery(j) {
   return false;
 }
 
-suite('Lexus Over Streams', function () {
-  test('docs/getting-started.md', async function () {
-    let data = await fs.readFile('./docs/getting-started.md');
-    let queries = getLexusQueries(data.toString());
-
-    for (let query of queries) {
-      if (isLexusQuery(query)) {
-        try {
-          await spec.validate(Object.assign(query, {
-            version: 'dev'
-          }));
-        } catch (e) {
-          throw new Error(e.message + '\n\n' + JSON.stringify(query, null, 2));
-        }
-      }
-    }
-  });
-});
+async function validateQuery(query) {
+  try {
+    await spec.validate(Object.assign(query, {
+      version: 'dev'
+    }));
+  } catch (e) {
+    throw new Error(e.message + '\n\n' + JSON.stringify(query, null, 2));
+  }
+}
