@@ -5,58 +5,48 @@
  * Please see the LICENSE included with this distribution for details.
  */
 
-const fs = require('fs');
-const RECORDS_FILE = './testsuite/records/100.sensor.events.jsonl';
-const queryFiles = [
-  './testsuite/queries/query.sumMatchPrefixGroup.json',
-  './testsuite/queries/query.maxGroup.json',
-  './testsuite/queries/query.findMatchRange.json',
-  './testsuite/queries/query.cardinalityOrMatch.json',
-  './testsuite/queries/query.distinctNotMatch.json',
-  './testsuite/queries/query.avgExists.json',
-  './testsuite/queries/query.minSuffixGroup.json',
-  './testsuite/queries/query.countAll100.json',
-  './testsuite/queries/query.countAndMatch.json'
+const fs = require('fs').promises;
+const path = require('path');
+
+const RECORDS_FILE = '100.sensor.events.jsonl';
+const QUERY_FILES = [
+  'query.sumMatchPrefixGroup.json',
+  'query.sumMatchPrefixGroup.json',
+  'query.maxGroup.json',
+  'query.findMatchRange.json',
+  'query.cardinalityOrMatch.json',
+  'query.distinctNotMatch.json',
+  'query.avgExists.json',
+  'query.minSuffixGroup.json',
+  'query.countAll100.json',
+  'query.countAndMatch.json'
 ];
 
-function jsonlToJson (jsonl) {
-  let json = [];
-  let lines = jsonl.split('\n');
-  for (let line of lines) {
-    if (line.length > 0) {
-      json.push(JSON.parse(line));
-    }
+module.exports.records = [];
+module.exports.queries = {};
+
+module.exports.init = async function () {
+  for (let query of QUERY_FILES) {
+    let loaded = await _readQueryFile(query);
+    this.queries[loaded.testId] = loaded;
   }
-  return json;
+  this.records = await _readRecordFile(RECORDS_FILE);
+};
+
+async function _readQueryFile(file) {
+  return JSON.parse(await _readResourceFile('queries', file));
 }
 
-module.exports = {
-  records: [],
-  queries: {},
-  init: function (callback) {
-    let that = this;
-    let waiting = queryFiles.length;
-    function fileDone () {
-      waiting -= 1;
-      if (waiting <= 0) {
-        fs.readFile(RECORDS_FILE, function (err, data) {
-          if (err) {
-            throw new Error(err);
-          }
-          that.records = jsonlToJson(data.toString());
-          callback && callback();
-        });
-      }
-    }
-    for (let queryFile of queryFiles) {
-      fs.readFile(queryFile, function (err, data) {
-        if (err) {
-          throw new Error(err);
-        }
-        let json = JSON.parse(data);
-        that.queries[json.testId] = json;
-        fileDone();
-      });
-    }
-  }
-};
+async function _readRecordFile(file) {
+  let jsonl = await _readResourceFile('records', file);
+
+  return jsonl
+    .split('\n')
+    .filter(line => line.length > 0)
+    .map(line => JSON.parse(line));
+}
+
+async function _readResourceFile(type, file) {
+  let src = path.join(__dirname, type, file);
+  return await fs.readFile(src, 'utf8');
+}

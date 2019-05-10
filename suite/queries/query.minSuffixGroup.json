@@ -1,6 +1,6 @@
 {
-  "testId": "query.minSuffixGroup.json",
+  "testId": "minSuffixGroup",
   "description": "the minimum value for the 'temperature' field, for each sensor.deviceID value that ends in 'dc'",
-  "query": [{"version": "0.2", "invoke": {"method": "min", "field": "temperature"}, "filters": {"$suffix": {"sensor.deviceID": "dc"}}, "group_by": ["sensor.deviceID"]}],
+  "query": [{"version": "0.2", "invoke": {"method": "min", "field": "temperature"}, "filters": {"$suffix": {"sensor.deviceID": "dc"}}, "groups": ["sensor.deviceID"]}],
   "result": [{"version":"0.2","result":{"3a822ab8eddc":35}}]
 }
