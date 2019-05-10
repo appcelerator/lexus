@@ -1,11 +1,5 @@
 const fs = require('fs').promises;
-
-const lexusSpec = require('../lib/lexus-spec');
-const LEXUS_VERSION = '0.2';
-
-async function validateLexusQuery(query) {
-  return lexusSpec.validate(query);
-}
+const spec = require('../lib/spec');
 
 function getLexusQueries(s) {
   let queries = [];
@@ -50,8 +44,8 @@ function isLexusQuery(j) {
     if (!Array.isArray(j)) {
       j = [ j ];
       for (let q of j) {
-        if (q.version === LEXUS_VERSION) {
-          return true; // just return true of first of the queries looks like a Lexus query
+        if (q.version) {
+          return true;
         }
       }
     }
@@ -69,7 +63,9 @@ suite('Lexus Over Streams', function () {
     for (let query of queries) {
       if (isLexusQuery(query)) {
         try {
-          await validateLexusQuery(query);
+          await spec.validate(Object.assign(query, {
+            version: 'dev'
+          }));
         } catch (e) {
           throw new Error(e.message + '\n\n' + JSON.stringify(query, null, 2));
         }

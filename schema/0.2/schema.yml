@@ -1,0 +1,306 @@
+---
+"$schema": http://json-schema.org/draft-07/schema#
+description: Lexus Query Specification
+type: object
+required:
+- version
+- invoke
+additionalProperties: false
+properties:
+  version:
+    title: Specification Version
+    description: The version identifier of the specification model
+    type: string
+  invoke:
+    title: Query Operations
+    description: The actions to take against the dataset
+    type: object
+    required:
+    - method
+    allOf:
+    - properties:
+        field:
+          title: Target field designation
+          description: The document path being operated on.
+          type: string
+    - oneOf:
+      - required:
+        - field
+        properties:
+          method:
+            type: string
+            const: avg
+          params:
+            type: object
+      - required:
+        - field
+        properties:
+          method:
+            type: string
+            const: cardinality
+          params:
+            type: object
+      - required:
+        - field
+        properties:
+          method:
+            type: string
+            const: count
+          params:
+            type: object
+      - required:
+        - field
+        properties:
+          method:
+            type: string
+            const: distinct
+          params:
+            type: object
+            properties:
+              count:
+                type: boolean
+                description: Boolean value to dictate whether counts are included with the
+                  terms list
+              limit:
+                type: number
+                description: The maximum number of terms to return, implicitly sorted by occurrence.
+      - properties:
+          method:
+            type: string
+            const: find
+          params:
+            type: object
+            properties:
+              limit:
+                type: number
+                description: A limit on the number of returned documents
+              offset:
+                type: number
+                description: A number of documents to skip before finding documents
+                  to return
+              sort:
+                type: object
+                additionalProperties:
+                  type: number
+                  description: A sort index to apply to the designated field
+                  enum:
+                  - -1
+                  - 1
+              include:
+                type: array
+                description: A list of fields to include in the returned documents
+                items:
+                  type: string
+              exclude:
+                type: array
+                description: A list of fields to exclude from the returned documents
+                items:
+                  type: string
+      - required:
+        - field
+        properties:
+          method:
+            type: string
+            const: max
+          params:
+            type: object
+      - required:
+        - field
+        properties:
+          method:
+            type: string
+            const: min
+          params:
+            type: object
+      - required:
+        - field
+        properties:
+          method:
+            type: string
+            const: percentiles
+          params:
+            type: object
+      - required:
+        - field
+        properties:
+          method:
+            type: string
+            const: sum
+          params:
+            type: object
+  filters:
+    title: Document Filtering
+    description: Filter operators to limit the matching result set before method invocation
+    type: object
+    additionalProperties: false
+    properties:
+      "$and":
+        title: AND-style query clauses
+        description: Dictates that documents much match all child clauses
+        type: array
+        items:
+        - {}
+      "$or":
+        title: OR-style query clauses
+        description: Dictates that documents much match any child clauses
+        type: array
+        items:
+        - {}
+      "$not":
+        title: NOT-style query clauses
+        description: Dictates that documents much match no child clauses
+        type: array
+        items:
+        - {}
+      "$exists":
+        title: Existence Filters
+        description: Filters to verify whether fields exist in documents
+        type: object
+        additionalProperties:
+          type: boolean
+          description: Boolean value to specify whether the field should exist
+      "$geo":
+        title: Geographic Polygon Filters
+        description: Filters based around geographic locations
+        type: object
+        additionalProperties:
+          type: array
+          description: Coordinates to apply as bounds of a polygon, in the form of
+            longitude/latitude pairs
+          minItems: 3
+          items:
+            type: object
+            additionalProperties: false
+            properties:
+              lat:
+                type: number
+                minimum: -90
+                maximum: 90
+              lon:
+                type: number
+                minimum: -180
+                maximum: 180
+      "$match":
+        title: Matching Filters
+        description: Abitrary filters to compare values for equality
+        type: object
+        additionalProperties:
+          oneOf:
+          - type: array
+            description: Matching clauses in a standard OR-style
+          - type: string
+            description: Arbitrary value the field must match
+          - type: number
+            description: Arbitrary value the field must match
+      "$prefix":
+        title: Prefix Filters
+        description: Arbitrary strings to locate at the start of a field value
+        type: object
+        additionalProperties:
+          oneOf:
+          - type: array
+            description: Prefix clauses in a standard OR-style
+            items:
+              type: string
+          - type: string
+            description: Single prefix the value must begin with
+      "$range":
+        title: Range Filtering
+        description: Filters on scalable values with plausible bounds
+        type: object
+        additionalProperties:
+          type: object
+          description: Range bounds to apply to the specified field
+          additionalProperties:
+            anyOf:
+            - anyOf:
+              - lt:
+                  type: number
+                  description: Exclusive upper bound designation
+              - lte:
+                  type: number
+                  description: Inclusive upper bound designation
+            - anyOf:
+              - gt:
+                  type: number
+                  description: Exclusive lower bound designation
+              - gte:
+                  type: number
+                  description: Inclusive lower bound designation
+      "$suffix":
+        title: Suffix Filters
+        description: Arbitrary strings to locate at the end of a field value
+        type: object
+        additionaProperties:
+          oneOf:
+          - type: array
+            description: Suffix clauses in a standard OR-style
+            items:
+              type: string
+          - type: string
+            description: Single suffix the value must end with
+  group_by:
+    title: Document Grouping
+    description: A grouping object, dictating the type and field to group on
+    type: array
+    items:
+      oneOf:
+        - type: string
+          description: A field name representing terms to group by
+        - type: object
+          description: A grouping object, dictating the type and field to group on
+          required:
+          - field
+          - type
+          additionalProperties: false
+          properties:
+            type:
+              title: Grouping Type
+              description: The data type being used by the grouping operation
+              oneOf:
+              - enum:
+                - date
+                - numeric
+                - string
+              - type: string
+                pattern: ^custom:\w+$
+            field:
+              title: Grouping Field
+              description: The document path to look at when creating groups
+              type: string
+            params:
+              title: Grouping Parameters
+              description:
+                Arbitrary parameters to pass to the grouping operation. Behaviour
+                of these options is specific to the backend being utilised.
+              oneOf:
+              - type: object
+                required:
+                - interval
+                properties:
+                  interval:
+                    title: Date Granularity
+                    description: Date granularity to use when grouping values into buckets
+                  default:
+                    title: Default Value
+                    description: A default value to apply to documents in groupings
+              - type: object
+                required:
+                - interval
+                properties:
+                  interval:
+                    title: Numeric Interval
+                    description: Numeric range to use when grouping values into buckets
+                  default:
+                    title: Default Value
+                    description: A default value to apply to documents in groupings
+              - type: object
+                properties:
+                  limit:
+                    title: Term Limits
+                    description: Limits on the amount of terms being returned in this grouping phase
+                    default: 100
+                  default:
+                    title: Default Value
+                    description: A default value to apply to documents in groupings
+
