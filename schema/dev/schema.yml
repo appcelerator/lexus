@@ -37,14 +37,6 @@ properties:
         properties:
           method:
             type: string
-            const: cardinality
-          params:
-            type: object
-      - required:
-        - field
-        properties:
-          method:
-            type: string
             const: count
           params:
             type: object
@@ -110,6 +102,14 @@ properties:
           method:
             type: string
             const: sum
+          params:
+            type: object
+      - required:
+        - field
+        properties:
+          method:
+            type: string
+            const: unique
           params:
             type: object
   filters:

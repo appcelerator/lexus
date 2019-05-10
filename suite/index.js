@@ -9,44 +9,29 @@ const fs = require('fs').promises;
 const path = require('path');
 
 const RECORDS_FILE = '100.sensor.events.jsonl';
-const QUERY_FILES = [
-  'query.sumMatchPrefixGroup.json',
-  'query.sumMatchPrefixGroup.json',
-  'query.maxGroup.json',
-  'query.findMatchRange.json',
-  'query.cardinalityOrMatch.json',
-  'query.distinctNotMatch.json',
-  'query.avgExists.json',
-  'query.minSuffixGroup.json',
-  'query.countAll100.json',
-  'query.countAndMatch.json'
-];
 
 module.exports.records = [];
 module.exports.queries = {};
 
 module.exports.init = async function () {
-  for (let query of QUERY_FILES) {
-    let loaded = await _readQueryFile(query);
-    this.queries[loaded.testId] = loaded;
+  let queries = path.join(__dirname, 'queries');
+  let records = path.join(__dirname, 'records');
+
+  let children = await fs.readdir(queries);
+
+  for (let child of children) {
+    let src = path.join(queries, child);
+    let test = await fs.readFile(src, 'utf8');
+    let parsed = JSON.parse(test);
+
+    this.queries[parsed.testId] = parsed;
   }
-  this.records = await _readRecordFile(RECORDS_FILE);
-};
 
-async function _readQueryFile(file) {
-  return JSON.parse(await _readResourceFile('queries', file));
-}
+  let file = path.join(records, RECORDS_FILE);
+  let jsonl = await fs.readFile(file, 'utf8');
 
-async function _readRecordFile(file) {
-  let jsonl = await _readResourceFile('records', file);
-
-  return jsonl
+  this.records = jsonl
     .split('\n')
     .filter(line => line.length > 0)
     .map(line => JSON.parse(line));
-}
-
-async function _readResourceFile(type, file) {
-  let src = path.join(__dirname, type, file);
-  return await fs.readFile(src, 'utf8');
-}
+};
