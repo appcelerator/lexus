@@ -4,7 +4,7 @@ const spec = require('../lib/spec');
 (async function () {
   switch (process.argv[2]) {
     case 'bundle':
-      await doBundle();
+      await doBundle(process.argv[3]);
       break;
     case 'validate':
       await doValidate(process.argv[3]);
@@ -15,11 +15,11 @@ const spec = require('../lib/spec');
   }
 }());
 
-async function doBundle() {
-  let schema = await spec.bundle();
+async function doBundle(vsn) {
+  let schema = await spec.bundle(vsn);
   console.info(JSON.stringify(schema, null, 2));
 }
 
-async function doValidate(query) {
-  await spec.validate(require(query));
+async function doValidate(vsn, query) {
+  await spec.validate(vsn, require(query));
 }

@@ -24,12 +24,12 @@ The json-schema specification of the Lexus DSL syntax is located in [schema/](ht
 To visualize the spec, use the small CLI included:
 
 ```bash
-$ bin/lexus-spec bundle
+$ bin/lexus-spec bundle <vsn>
 ```
 
 To validate the syntax of a Lexus query against the spec:
 ```bash
-$ bin/lexus-spec validate query.json
+$ bin/lexus-spec validate <vsn> query.json
 ```
 where `query.json` is an example file containing a Lexus query to check for validation of.
 
