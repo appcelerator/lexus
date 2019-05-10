@@ -1,6 +1,6 @@
 {
   "testId": "avgExists",
   "description": "average value of the humidity for documents that have a 'humidity' field",
-  "query": [{"version": "0.2", "invoke": {"method": "avg", "field": "humidity"}, "filters": {"$exists": {"humidity": true}}}],
+  "query": [{"version": "0.2", "operation": {"method": "avg", "field": "humidity"}, "filters": {"$exists": {"humidity": true}}}],
   "result": [{"version":"0.2","result":39.256410256410255}]
 }

@@ -1,6 +1,6 @@
 {
   "testId": "uniqueOrMatch",
   "description": "count the number of possible sensor.battery values that are in 'humidity.sensor.reading' or 'wind.sensor.reading' events",
-  "query": [{"version": "0.2", "invoke": {"method": "unique", "field": "sensor.battery"}, "filters": {"$or": [{"$match": {"event": "humidity.sensor.reading"}}, {"$match": {"event": "wind.sensor.reading"}}]}}],
+  "query": [{"version": "0.2", "operation": {"method": "unique", "field": "sensor.battery"}, "filters": {"$or": [{"$match": {"event": "humidity.sensor.reading"}}, {"$match": {"event": "wind.sensor.reading"}}]}}],
   "result": [{"version":"0.2","result":35}]
 }

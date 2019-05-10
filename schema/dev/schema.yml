@@ -4,14 +4,14 @@ description: Lexus Query Specification
 type: object
 required:
 - version
-- invoke
+- operation
 additionalProperties: false
 properties:
   version:
     title: Specification Version
     description: The version identifier of the specification model
     type: string
-  invoke:
+  operation:
     title: Query Operations
     description: The actions to take against the dataset
     type: object

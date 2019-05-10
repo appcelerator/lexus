@@ -1,6 +1,6 @@
 {
   "testId": "findMatchRange",
   "description": "find all documents where the battery value is '62%' and the ts is within 1553300000000 and 1553500000000",
-  "query": [{"version": "0.2", "invoke": {"method": "find"}, "filters": {"$match": {"sensor.battery": "62%"}, "$range": {"ts": {"gt": 1553300000000, "lt": 1553500000000}}}}],
+  "query": [{"version": "0.2", "operation": {"method": "find"}, "filters": {"$match": {"sensor.battery": "62%"}, "$range": {"ts": {"gt": 1553300000000, "lt": 1553500000000}}}}],
   "result": [{"version":"0.2","result":[{"event":"wind.sensor.reading","id":"62e6c878-54b8-6d45-f582-aaf090a312c7","ts":1553436035377,"arrival":"2019-03-25T07:03:39.855Z","wind":{"direction":"e","speed":7},"sensor":{"deviceID":"1e82ce4f4847","position":{"lat":33.589797,"lon":-112.105528},"firmware":"2.3.45","battery":"62%"},"meta":{"units":"mph"}}]}]
 }

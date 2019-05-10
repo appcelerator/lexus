@@ -18,14 +18,14 @@ The most stripped down possible Lexus Query is the following:
 ```
 {
   "version": "0.2",
-  "invoke": {
+  "operation": {
     "method": "find"
   }
 }
 ```
 
 This will simply tell the Lexus to return any matching documents.
-The `invoke` field is `{"method": "find"}` and there is no `filter` field.
+The `operation` field is `{"method": "find"}` and there is no `filter` field.
 So the query matches any document in the storage system and does no transformation or aggregation on the results.
 By default, this backend implementation of Lexus is set to return 10 documents so the first 10 that are retrieved by the cursor of the data storage system are returned.
 
@@ -42,7 +42,7 @@ The response returned by Lexus also contains a `result` field, which in this cas
 ```
 {
   "version": "0.2",
-  "invoke": {
+  "operation": {
     "method": "count",
     "field": "event"
   }
@@ -50,7 +50,7 @@ The response returned by Lexus also contains a `result` field, which in this cas
 ```
 
 In this example we would like a total count of the documents instead of the documents themselves.
-We simply change the `invoke.method` from `find` to `count`, and add a `field` field.
+We simply change the `operation.method` from `find` to `count`, and add a `field` field.
 The value in `field` is the name of the field that we want Lexus to use to count the documents.
 This is useful when we want to count the subset of documents that have a particular field present.
 In our example schema, every document contains the field `event` so the results of this query will be telling us the total number of documents in our data.
@@ -70,7 +70,7 @@ The result returned looks like:
 ```
 {
   "version": "0.2",
-  "invoke": {
+  "operation": {
     "method": "count",
     "field": "event"
   },
@@ -116,7 +116,7 @@ The results returned will be broken down into sections for each value that can a
 ```
 {
   "version": "0.2",
-  "invoke": {
+  "operation": {
     "method": "count",
     "field": "event"
   },
@@ -220,7 +220,7 @@ This parameterizes the grouping to only allow the most popular 3 terms to be ret
 ```
 {
   "version": "0.2",
-  "invoke": {
+  "operation": {
     "method": "count",
     "field": "event"
   },
@@ -287,7 +287,7 @@ Note that as a shorthand for `$or` we can supply an array of strings to a field 
 ```
 {
   "version": "0.2",
-  "invoke": {
+  "operation": {
     "method": "count",
     "field": "event"
   },
@@ -342,7 +342,7 @@ Finally, the `sort` field specifies that the `deviceId` field in the documents s
 ```
 {
   "version": "0.2",
-  "invoke": {
+  "operation": {
     "method": "find",
     "params":{
       "limit": 10,
