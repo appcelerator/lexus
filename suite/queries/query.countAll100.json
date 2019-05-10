@@ -1,6 +1,6 @@
 {
   "testId": "countAll100",
   "description": "count of all 100 documents",
-  "query": [{"version": "0.2", "invoke": {"method": "count", "field": "id"}}],
+  "query": [{"version": "0.2", "operation": {"method": "count", "field": "id"}}],
   "result": [{"version":"0.2","result":100}]
 }
