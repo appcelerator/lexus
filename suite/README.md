@@ -34,8 +34,8 @@ done
      firmware: '3.0',
      battery: '84%' },
   meta: { units: 'mph' } }
-> suite.queries['query.sumMatchPrefixGroup.json'].query[0].group_by.length
+> suite.queries['sumMatchPrefixGroup'].query[0].groups.length
 1
-> suite.queries['query.sumMatchPrefixGroup.json'].query[0].group_by[0]
+> suite.queries['sumMatchPrefixGroup'].query[0].groups[0]
 'sensor.deviceID'
 ```
