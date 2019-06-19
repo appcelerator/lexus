@@ -32,9 +32,7 @@ properties:
             const: avg
           params:
             type: object
-      - required:
-        - field
-        properties:
+      - properties:
           method:
             type: string
             const: count
