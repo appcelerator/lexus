@@ -29,7 +29,7 @@ $ bin/lexus-spec bundle <vsn>
 
 To validate the syntax of a Lexus query against the spec:
 ```bash
-$ bin/lexus-spec validate <vsn> query.json
+$ bin/lexus-spec validate query.json
 ```
 where `query.json` is an example file containing a Lexus query to check for validation of.
 
