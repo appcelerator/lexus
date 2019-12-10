@@ -20,6 +20,6 @@ async function doBundle(vsn) {
   console.info(JSON.stringify(schema, null, 2));
 }
 
-async function doValidate(vsn, query) {
-  await spec.validate(vsn, require(query));
+async function doValidate(query) {
+  await spec.validate(require(query));
 }
