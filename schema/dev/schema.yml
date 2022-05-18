@@ -121,19 +121,19 @@ properties:
         description: Dictates that documents much match all child clauses
         type: array
         items:
-        - {}
+          - $ref: "#/properties/filters"
       "$or":
         title: OR-style query clauses
         description: Dictates that documents much match any child clauses
         type: array
         items:
-        - {}
+          - $ref: "#/properties/filters"
       "$not":
         title: NOT-style query clauses
         description: Dictates that documents much match no child clauses
         type: array
         items:
-        - {}
+          - $ref: "#/properties/filters"
       "$exists":
         title: Existence Filters
         description: Filters to verify whether fields exist in documents
@@ -193,27 +193,24 @@ properties:
         additionalProperties:
           type: object
           description: Range bounds to apply to the specified field
-          additionalProperties:
-            anyOf:
-            - anyOf:
-              - lt:
-                  type: number
-                  description: Exclusive upper bound designation
-              - lte:
-                  type: number
-                  description: Inclusive upper bound designation
-            - anyOf:
-              - gt:
-                  type: number
-                  description: Exclusive lower bound designation
-              - gte:
-                  type: number
-                  description: Inclusive lower bound designation
+          properties:
+            lt:
+              type: number
+              description: Exclusive upper bound designation
+            lte:
+              type: number
+              description: Inclusive upper bound designation
+            gt:
+              type: number
+              description: Exclusive lower bound designation
+            gte:
+              type: number
+              description: Inclusive lower bound designation
       "$suffix":
         title: Suffix Filters
         description: Arbitrary strings to locate at the end of a field value
         type: object
-        additionaProperties:
+        additionalProperties:
           oneOf:
           - type: array
             description: Suffix clauses in a standard OR-style

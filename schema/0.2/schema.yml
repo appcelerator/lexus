@@ -212,7 +212,6 @@ properties:
           type: object
           description: Range bounds to apply to the specified field
           additionalProperties:
-            anyOf:
             - anyOf:
               - lt:
                   type: number
@@ -231,7 +230,7 @@ properties:
         title: Suffix Filters
         description: Arbitrary strings to locate at the end of a field value
         type: object
-        additionaProperties:
+        additionalProperties:
           oneOf:
           - type: array
             description: Suffix clauses in a standard OR-style
